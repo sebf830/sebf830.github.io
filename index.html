@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="">
+
+    <style>
+        form {
+            margin-top: 100px;
+        }
+
+        .enigme {
+            width: 50%;
+            height: 40px;
+            border-radius: 12px;
+            display: block;
+        }
+
+        .formdiv {
+            padding: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .formdiv button {
+            height: 46px;
+        }
+
+        .red {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+
+    <form>
+        <div class="formdiv">
+            <input type="text" id="enigme" class="enigme" placeholder="Entrer la solution ici" />&nbsp;
+            <button type="button" id="button">Valider</button><br>
+        </div>
+        <div class="msg" style="text-align:center"></div>
+    </form>
+
+    <script>
+        const input = document.querySelector('#enigme');
+        const button = document.querySelector('#button');
+        const msg = document.querySelector('.msg');
+
+        function decrypt(key) {
+
+            if (key == null || key == 'undefined' || !key || key == '') {
+                msg.style.color = 'red';
+                msg.innerHTML = "Mauvaise réponse";
+            }
+
+            key = key.trim().toLowerCase();
+
+            let result = '';
+            let str64 = 'BRsQBR9bW0YKAwgdBRkITBwACAZAHw0HDQ8cCEJdVVhKGBURHQcOGgxBBxkDFBBGBh4LHEskAQUmLCcAFwsgFF0VFSUYXTUHLAAhMTMOLQADLAU/BjQZDRgvOjYeTTxUQzAn'
+            let str = decodeURIComponent(escape(atob(str64)));
+
+            for (let i = 0; i < str.length; i++) {
+                result += String.fromCharCode(str.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+            }
+
+            if (!result.match('https://emerald') || result.length !== 99) {
+                msg.style.color = 'red';
+                msg.innerHTML = "Mauvaise réponse";
+                return false;
+            }
+
+            msg.style.color = 'green';
+            msg.innerHTML = result;
+            return true;
+        }
+
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            if (input.value.length == 0) {
+                msg.innerHTML = "Aucune réponse";
+                msg.style.color = 'red';
+            }
+
+            decrypt(input.value)
+        })
+
+
+    </script>
+</body>
+
+</html>
