@@ -55,43 +55,42 @@
     <script>
         const input = document.querySelector('#enigme');
         const button = document.querySelector('#button');
-        const msg = document.querySelector('.msg');
+
+        function message(msg, color) {
+            document.querySelector('.msg').style.color = color;
+            document.querySelector('.msg').innerHTML = msg;
+        }
 
         function decrypt(key) {
 
-            if (key == null || key == 'undefined' || !key || key == '') {
-                msg.style.color = 'red';
-                msg.innerHTML = "Mauvaise réponse";
-            }
+            if (key == null || key == 'undefined' || !key || key == '') message("Mauvaise réponse", "red")
 
             key = key.trim().toLowerCase();
 
+            if (key.endsWith('s')) {
+                key = key.slice(0, -1);
+            }
+
             let result = '';
-            let str64 = 'BRsQBR9bW0YKAwgdBRkITBwACAZAHw0HDQ8cCEJdVVhKGBURHQcOGgxBBxkDFBBGBh4LHEskAQUmLCcAFwsgFF0VFSUYXTUHLAAhMTMOLQADLAU/BjQZDRgvOjYeTTxUQzAn'
-            let str = decodeURIComponent(escape(atob(str64)));
+            let str = decodeURIComponent(escape(atob('BRsQBR9bW0YKAwgdBRkITBwACAZAHw0HDQ8cCEJdVVhKGBURHQcOGgxBBxkDFBBGBh4LHEskAQUmLCcAFwsgFF0VFSUYXTUHLAAhMTMOLQADLAU/BjQZDRgvOjYeTTxUQzAn')));
 
             for (let i = 0; i < str.length; i++) {
                 result += String.fromCharCode(str.charCodeAt(i) ^ key.charCodeAt(i % key.length));
             }
 
             if (!result.match('https://emerald') || result.length !== 99) {
-                msg.style.color = 'red';
-                msg.innerHTML = "Mauvaise réponse";
+                message("Mauvaise réponse", "red")
                 return false;
             }
 
-            msg.style.color = 'green';
-            msg.innerHTML = result;
+            message(result, "green")
             return true;
         }
 
         button.addEventListener('click', (e) => {
             e.preventDefault();
 
-            if (input.value.length == 0) {
-                msg.innerHTML = "Aucune réponse";
-                msg.style.color = 'red';
-            }
+            if (input.value.length == 0) message("Aucune réponse", "red")
 
             decrypt(input.value)
         })
