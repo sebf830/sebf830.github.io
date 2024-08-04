@@ -1,8 +1,4 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
 <html>
 
 <head>
@@ -12,7 +8,6 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="">
-
     <style>
         form {
             margin-top: 100px;
@@ -54,7 +49,23 @@
 
     <script>
         const input = document.querySelector('#enigme');
-        const button = document.querySelector('#button');
+
+        document.addEventListener('contextmenu', function (event) {
+            event.preventDefault();
+        });
+
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'F12') event.preventDefault();
+            if (event.ctrlKey && event.shiftKey && event.key === 'I') event.preventDefault();
+            if (event.ctrlKey && event.shiftKey && event.key === 'J') event.preventDefault();
+            if (event.ctrlKey && event.key === 'U') event.preventDefault();
+        });
+
+        document.querySelector('#button').addEventListener('click', (e) => {
+            e.preventDefault();
+            if (input.value.length == 0) message("Aucune réponse", "red")
+            decrypt(input.value)
+        })
 
         function message(msg, color) {
             document.querySelector('.msg').style.color = color;
@@ -62,38 +73,32 @@
         }
 
         function decrypt(key) {
-
             if (key == null || key == 'undefined' || !key || key == '') message("Mauvaise réponse", "red")
 
             key = key.trim().toLowerCase();
 
-            if (key.endsWith('s')) {
-                key = key.slice(0, -1);
-            }
+            let strs = [
+                'AB0EABxeXUAICA0bERwLSRoGCg1FGRkCDgoaDkBWUF5eHRYUGwEMEQlHExwAERZABBUOGl8hAgAgKiULEg00EV4QEyMaVjABOAUiNDUILwsGKhE6BTEfCxokPzAKSD9RRTYl',
+                'GwAVBAZfXFsEGRAXEhgFWR0MFBxMBBwXEhoJFVhWS0NPGQwVGhoAABRLEBgOARFKGgQHB1o0HhAzMT0LCRAlFUQREjgWRy0NOwEsJDICMRoPNxQvGSEMEAIkJC0bTCVQRC0p',
+                'BRUGwpkQUk5DRQsKEQkBBV/CgQoPCUFQDx0CBgUAX8OaW19PAVkWBg0JGQBcwooPBxQIDw8fBRtCMB/CjTEtKQJaAisCWRkAPsKeUDAJJFUrPyQPLw8cwqoCIgs5TQIYIj80G0rCuVZfOCQ=',
+                'BRUGFRBSTkNFCwoRCQEFXw0KDwlBUA8dAgYFAF9WW19PAVkWBg0JGQBcBg8HFAgPDx8FG0IwHwExLSkCWgIrAlkZAD4SUDAJJFUrPyQPLw8cJgIiCzlNAhgiPzQbSjVWXzgk',
+                'HAYbExJew4ZdChkXHQINAMOEGgYTGkITCBbCiBwHFV9cW1ZKwoQLHx0cDhcASsKKHgABFkAKEQLCml0+GRY9JikKwpMWKxVDGwItE8OaKgc8ByIzJgPCqxwBNxMlCTQJwo0FLiMrFVsxUcOeKyc=',
+                'HAYbExJeSl0KGRcdAg0ASBoGExpCEwgWBBwHFV9cW1ZKCAsfHRwOFwBKBh4AARZAChECFl0+GRY9JikKHxYrFUMbAi0TVioHPAciMyYDJxwBNxMlCTQJAQUuIysVWzFRUisn'
+            ];
 
-            let result = '';
-            let str = decodeURIComponent(escape(atob('BRsQBR9bW0YKAwgdBRkITBwACAZAHw0HDQ8cCEJdVVhKGBURHQcOGgxBBxkDFBBGBh4LHEskAQUmLCcAFwsgFF0VFSUYXTUHLAAhMTMOLQADLAU/BjQZDRgvOjYeTTxUQzAn')));
+            for (el of strs) {
+                let str = decodeURIComponent(escape(atob(el)));
+                let result = '';
 
-            for (let i = 0; i < str.length; i++) {
-                result += String.fromCharCode(str.charCodeAt(i) ^ key.charCodeAt(i % key.length));
-            }
+                for (let i = 0; i < str.length; i++)  result += String.fromCharCode(str.charCodeAt(i) ^ key.charCodeAt(i % key.length));
 
-            if (!result.match('https://emerald') || result.length !== 99) {
+                if (result.match('https://emerald') && result.length == 99) {
+                    message(`<span>Bravo tu as trouvé ! <a class="link" href="${result}" target="blank">click ici</a></span>`, "green")
+                    break;
+                }
                 message("Mauvaise réponse", "red")
-                return false;
             }
-
-            message(result, "green")
-            return true;
         }
-
-        button.addEventListener('click', (e) => {
-            e.preventDefault();
-
-            if (input.value.length == 0) message("Aucune réponse", "red")
-
-            decrypt(input.value)
-        })
 
 
     </script>
