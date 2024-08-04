@@ -73,9 +73,10 @@
         }
 
         function decrypt(key) {
-            if (key == null || key == 'undefined' || !key || key == '') message("Mauvaise réponse", "red")
+            if (key == null || key == 'undefined' || !key || key == '') message("Aucune réponse", "red")
 
             key = key.trim().toLowerCase();
+            const winner = false;
 
             let strs = [
                 'AB0EABxeXUAICA0bERwLSRoGCg1FGRkCDgoaDkBWUF5eHRYUGwEMEQlHExwAERZABBUOGl8hAgAgKiULEg00EV4QEyMaVjABOAUiNDUILwsGKhE6BTEfCxokPzAKSD9RRTYl',
@@ -94,13 +95,12 @@
 
                 if (result.match('https://emerald') && result.length == 99) {
                     message(`<span>Bravo tu as trouvé ! <a class="link" href="${result}" target="blank">click ici</a></span>`, "green")
+                    winner = true;
                     break;
                 }
-                message("Mauvaise réponse", "red")
             }
+            if (!winner) confirm('Mauvaise réponse, recommencer ?') ? window.location.href = window.location.href : window.location.href = 'https://google.fr'
         }
-
-
     </script>
 </body>
 
