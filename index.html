@@ -9,6 +9,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="">
     <style>
+        body {
+            background-image: url('city.png');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-attachment: fixed;
+        }
+
         form {
             margin-top: 100px;
         }
@@ -34,6 +42,11 @@
         .red {
             color: red;
         }
+
+        .link {
+            color: white;
+
+        }
     </style>
 </head>
 
@@ -46,6 +59,7 @@
         </div>
         <div class="msg" style="text-align:center"></div>
     </form>
+
 
     <script>
         const input = document.querySelector('#enigme');
@@ -94,12 +108,12 @@
                 for (let i = 0; i < str.length; i++)  result += String.fromCharCode(str.charCodeAt(i) ^ key.charCodeAt(i % key.length));
 
                 if (result.match('https://emerald') && result.length == 99) {
-                    message(`<span>Bravo tu as trouvé ! <a class="link" href="${result}" target="blank">click ici</a></span>`, "green")
+                    message(`<marquee style="font-size:24px; color:white; font-style:bold" scrolldelay="30">bravo tu as trouvé la bonne réponse  ! <a class="link" href="${result}" target="blank">click ici</a></marquee>`, 'white')
                     winner = true;
                     break;
                 }
             }
-            if (!winner) confirm('Mauvaise réponse, recommencer ?') ? window.location.href = window.location.href : window.location.href = 'https://google.fr'
+            if (!winner) confirm('Mauvaise réponse, recommencer?') ? window.location.href = window.location.href : window.location.href = 'https://google.fr'
         }
     </script>
 </body>
